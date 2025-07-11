@@ -4,7 +4,7 @@ import lombok.Data;
 
 @Data
 public class Room {
-	private int room;
+	private int roomNo;
 	private String roomName;
 	private int roomLimit;
 }

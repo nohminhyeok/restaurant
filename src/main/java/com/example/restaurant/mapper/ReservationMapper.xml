@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.restaurant.mapper.ReservationMapper">
+	<select id="getTable" resultType="com.example.restaurant.dto.Room">
+	    SELECT room_no AS roomNo, room_name AS roomName, room_limit AS roomLimit FROM room
+	</select>
+	<select id="getReservedRoom" resultType="int">
+	    SELECT room_no AS roomNo 
+	    FROM reservation 
+	    WHERE reservation_date = #{date}
+	    AND reservation_option = #{reserveTime}
+	</select>
+</mapper>
