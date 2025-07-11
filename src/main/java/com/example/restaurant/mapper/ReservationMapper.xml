@@ -10,4 +10,14 @@
 	    WHERE reservation_date = #{date}
 	    AND reservation_option = #{reserveTime}
 	</select>
+	
+	<insert id="addReservationRoom" parameterType="com.example.restaurant.dto.Reservation">
+		INSERT INTO reservation(
+			room_no, reservation_date, reservation_option, reservation_id
+			, reservation_count, provider, createDate, updateDate
+		) VALUES (
+			#{roomNo}, #{reservationDate}, #{reservationOption}, #{reservationId}
+			, #{reservationCount}, #{provider}, now(), now()
+		)
+	</insert>
 </mapper>

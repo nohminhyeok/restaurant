@@ -49,5 +49,28 @@ public class CustomOAuth2User implements OAuth2User{ // OAuth2UserService 반환
 	    // 기본
 	    return this.attributes.get("id").toString();
 	}
+	
+	public String getOAuthId() {
+	    // 카카오 id
+	    if(this.attributes.containsKey("id")) {
+	        return this.attributes.get("id").toString();
+	    }
+	    // 네이버 id
+	    if(this.attributes.containsKey("response")) {
+	        Map<String, Object> response = (Map<String, Object>) this.attributes.get("response");
+	        return response.get("id").toString();
+	    }
+	    // 기타
+	    return null;
+	}
 
+	public String getProvider() {
+	    if (this.attributes.containsKey("kakao_account")) {
+	        return "kakao";
+	    }
+	    if (this.attributes.containsKey("response")) {
+	        return "naver";
+	    }
+	    return "unknown";
+	}
 }
