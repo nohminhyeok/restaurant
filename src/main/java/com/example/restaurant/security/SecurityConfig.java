@@ -17,29 +17,33 @@ public class SecurityConfig {
     SecurityConfig(CustomOAuth2Service customOAuth2Service) {
         this.customOAuth2Service = customOAuth2Service;
     }
-	@Bean
-	SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
-		
-		httpSecurity.csrf(csrfConfigurer  -> csrfConfigurer .disable());
-		
-		// 인가 설정
-		httpSecurity.authorizeHttpRequests(matcherRegistry -> 
-										   matcherRegistry.requestMatchers("/","/WEB-INF/view/**","/login","/oauth2/**")
-														  .permitAll()
-														  .anyRequest()
-														  .authenticated());
-		
-		// 로그인
-		httpSecurity.formLogin(formLoginConfigurer -> formLoginConfigurer.disable());
-		
-		// OAuth2 로그인 설정
-		// httpSecurity.oauth2Login(Customizer.withDefaults()); // GET으로 /Login 요청이 오면 가로채서 OAuth2 기본설정 (로그인방법)을 사용하겠다.
-		
-		httpSecurity.oauth2Login(oAuth2LoginConfigurer  -> 
-								 oAuth2LoginConfigurer.loginPage("/login")
-								 					  .defaultSuccessUrl("/restaurantTableReservation", true)
-								 					  .userInfoEndpoint(userInfoEndpointConfig -> userInfoEndpointConfig.userService(customOAuth2Service)));
-		
-		return httpSecurity.build();
-	}
+
+    @Bean
+    SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
+        
+        httpSecurity.csrf(csrfConfigurer -> csrfConfigurer.disable());
+
+        // 인가 설정
+        httpSecurity.authorizeHttpRequests(matcherRegistry -> 
+            matcherRegistry
+                .requestMatchers("/", "/WEB-INF/view/**", "/login", "/oauth2/**", "/css/**", "/js/**", "/images/**")
+                .permitAll()
+                .anyRequest().authenticated()
+        );
+
+        // 폼 로그인은 disable (ID/PW 로그인 X, 오직 소셜 로그인만 사용)
+        httpSecurity.formLogin(formLoginConfigurer -> formLoginConfigurer.disable());
+
+        // OAuth2 로그인 설정
+        httpSecurity.oauth2Login(oAuth2LoginConfigurer ->
+            oAuth2LoginConfigurer
+                .loginPage("/login")
+                .defaultSuccessUrl("/restaurantTableReservation", true)
+                .userInfoEndpoint(userInfoEndpointConfig -> 
+                    userInfoEndpointConfig.userService(customOAuth2Service)
+                )
+        );
+
+        return httpSecurity.build();
+    }
 }
