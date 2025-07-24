@@ -40,14 +40,9 @@ public class RoomController {
 		}
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		String loginUsername = authentication.getName();
-		String loginId = null;
 
 		if (authentication.getPrincipal() instanceof CustomOAuth2User) {
 		    CustomOAuth2User customUser = (CustomOAuth2User) authentication.getPrincipal();
-		    loginId = customUser.getOAuthId(); // 위에서 만든 메소드 사용
-		} else {
-		    // 일반 로그인(UsernamePasswordAuthenticationToken 등) 처리
-		    loginId = authentication.getName(); // 이 경우 username
 		}
 		List<Room> list = reservationService.getTable();
 		List<Integer> reservedRoom = reservationService.getReservedRoom(date, reserveTime);
